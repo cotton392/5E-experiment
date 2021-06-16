@@ -11,7 +11,7 @@ import ssl
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
-DATABASE_URI = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}?charset=utf8'.format(**{
+DATABASE_URI = 'postgresql+psycopg2://{user}:{password}@{host}:{port}/{name}'.format(**{
     'user': os.environ.get("DATABASE_USER"),
     'password': os.environ.get("DATABASE_PASSWORD"),
     'host': os.environ.get("DATABASE_HOST"),
