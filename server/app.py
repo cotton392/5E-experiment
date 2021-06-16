@@ -58,6 +58,11 @@ class Review(db.Model):
     review_detail = db.Column(db.String(255), nullable=False)
     updated_at = db.Column(db.Integer, nullable=False)
 
+    def __init__(self, reviewed_menu_id, review_detail, updated_at):
+        self.reviewed_menu_id = reviewed_menu_id
+        self.review_detail = review_detail
+        self.updated_at = updated_at
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -83,6 +88,7 @@ def post_sell_condition():
     modified_menu = db.session.query(Menu).filter(Menu.id==modified_menu_id).first()
     modified_menu.is_sold_out = sell_condition
 
+    db.session.add(modified_menu)
     db.session.commit()
 
     return 0
