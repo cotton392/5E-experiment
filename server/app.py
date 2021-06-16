@@ -70,6 +70,10 @@ db.create_all()
 # ***************** api *****************
 
 @app.route('/api/get-menu', methods=['GET'])
+def confirm_connection():
+    return "hello world!"
+
+@app.route('/api/get-menu', methods=['GET'])
 def get_menu_detail():
     menus_detail = Menu.query.all()
     return jsonify({'menu_detail': [Menu.to_dict() for detail in menus_detail]})
