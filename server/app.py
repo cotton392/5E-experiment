@@ -1,7 +1,7 @@
 from flask.app import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
-from flask import Blueprint, request, abort, jsonify
+from flask import Blueprint, request, abort, jsonify, render_template
 from datetime import datetime
 from os.path import join, dirname
 from dotenv import load_dotenv
@@ -26,6 +26,7 @@ context.load_cert_chain('server.crt', 'server.key')
 db = SQLAlchemy(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
+
 
 # ***************** database table definition *****************
 class Menu(db.Model):
@@ -67,12 +68,8 @@ class Review(db.Model):
 
 db.create_all()
 
-# ***************** api *****************
 
-@app.route('/api/get-menu', methods=['GET'])
-def confirm_connection():
-    return "hello world!"
-
+# ***************** api route *****************
 @app.route('/api/get-menu', methods=['GET'])
 def get_menu_detail():
     menus_detail = Menu.query.all()
@@ -80,6 +77,14 @@ def get_menu_detail():
 
 @app.route('/api/post-sell-condition', methods=['POST'])
 def post_sell_condition():
+    payload = request.json
+    modified_menu_id = payload.get('modified_menu_id')
+    sell_condition = payload.get('sell_condition')
+    modified_menu = db.session.query(Menu).filter(Menu.id==modified_menu_id).first()
+    modified_menu.is_sold_out = sell_condition
+
+    db.session.commit()
+
     return 0
 
 @app.route('/api/get-review', methods=['GET'])
@@ -103,7 +108,17 @@ def post_review_detail():
 
     return jsonify(review.to_dict())
 
-# ***************** run app *****************
 
+# ***************** view route *****************
+@app.route('/', methods=['GET'])
+def index():
+    return "hello world!"
+
+@app.route('/review', methods=['GET'])
+def review():
+    return render_template('review.html')
+
+
+# ***************** run app *****************
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=8080, ssl_context=context, debug=True)
