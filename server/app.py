@@ -91,7 +91,7 @@ def post_sell_condition():
     db.session.add(modified_menu)
     db.session.commit()
 
-    return 0
+    return jsonify(modified_menu.to_dict())
 
 @app.route('/api/get-review', methods=['GET'])
 def get_review_detail():
@@ -116,6 +116,7 @@ def post_review_detail():
 
 
 # ***************** view route *****************
+# これ要らんかも(https://macoblog.com/vuejs-cdn-spa/)
 @app.route('/', methods=['GET'])
 def index():
     return "hello world!"
