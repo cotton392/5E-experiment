@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>明石高専食堂システム</title>
+
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <!-- Vue Router -->
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <!-- Vue Loader -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+
+</head>
+
+<body>
+
+    <div id="app">
+        <ul>
+            <router-link tag="li" to="/">page1</router-link>
+            <router-link tag="li" to="/page2">page2</router-link>
+        </ul>
+        <router-view></router-view>
+    </div>
+
+    <script src="./main.js"></script>
+
+</body>
+
+</html>
