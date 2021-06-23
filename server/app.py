@@ -7,6 +7,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 import os
 import ssl
+import sys
 
 dotenv_path = join(dirname(__file__), ".env")
 load_dotenv(dotenv_path)
@@ -116,16 +117,11 @@ def post_review_detail():
 
 
 # ***************** view route *****************
-# これ要らんかも(https://macoblog.com/vuejs-cdn-spa/)
 @app.route('/', methods=['GET'])
 def index():
-    return "hello world!"
-
-@app.route('/review', methods=['GET'])
-def review():
-    return render_template('review.html')
+    return render_template("index.html")
 
 
 # ***************** run app *****************
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080, ssl_context=context, debug=True)
+    app.run(host='0.0.0.0', port=int(sys.argv[1]), ssl_context=context, debug=True)
