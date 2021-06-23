@@ -22,7 +22,8 @@
     <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
-    
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 </head>
 
@@ -45,5 +46,29 @@
     <script src="./main.js"></script>
 
 </body>
+
+<script>
+    const baseUrl = "https://172.16.16.7:8086/api"
+
+    function main(){
+        const url = baseUrl + "/get-menu"
+        console.log(url)
+
+        axios
+            .get(url)
+            .then(getSuccess)
+            .catch(getFailure)
+    }
+
+    function getSuccess(response) {
+        console.log(response.data)
+    }
+
+    function getFailure(response) {
+        console.log("Failed")
+    }
+
+    window.onload = main
+</script>
 
 </html>
