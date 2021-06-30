@@ -31,12 +31,12 @@
 
     <div id="app">
         <top-component></top-component>
-        <div>
+        <review-component></review-component>
+	<div>
             <input v-model="reviwed_menu_id" placeholder="1" required>
             <input v-model="review_detail" placeholder="ここにレビュー本文を入力" required>
             <button v-on:click="PostReviewData">送信</button>
         </div>
-        <review-component></review-component>
     </div>
 
 </body>
@@ -74,10 +74,8 @@
                     tooLong: false,
                     tooShort: false
                 },
-                request: {
-                    reviewed_menu_id: 0,
-                    review_detail: ''
-                }
+                reviewed_menu_id: 0,
+                review_detail: ''
             }
         },
         created: function(){
@@ -96,7 +94,10 @@
                 const Url = "https://172.16.16.7:8086/api/post-review"
                 this.request.reviewed_menu_id = id
                 this.request.review_detail = detail
-                axios.post(Url, this.request)
+                axios.post(Url, {
+		    reviewed_menu_id: this.reviewed_menu_id,
+		    review_detail: this.review_detail
+		})
                 .then(res => {
                     console.log(res.data)
                 })
@@ -117,7 +118,7 @@
             'top-component': Top,
             'review-component': Review
         }
-    }).$mount('#app');
+    })
 </script>
 
 </html>
