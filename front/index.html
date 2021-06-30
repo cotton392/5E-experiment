@@ -31,6 +31,11 @@
 
     <div id="app">
         <top-component></top-component>
+        <div>
+            <input v-model="reviwed_menu_id" placeholder="1" required>
+            <input v-model="review_detail" placeholder="ここにレビュー本文を入力" required>
+            <button v-on:click="PostReviewData">送信</button>
+        </div>
         <review-component></review-component>
     </div>
 
@@ -41,7 +46,7 @@
         template: '<h1>hello 2</h1>',
         data: function(){
             return {
-                Menus: {}
+                Menus: {},
             }
         },
         created: function(){
@@ -53,7 +58,7 @@
                 axios.get(Url)
                 .then(res => {
                     this.Menus = res.data.menu_detail
-		    console.log(this.Menus[0])
+		            console.log(this.Menus[0])
                 })
             }
         }
@@ -68,6 +73,10 @@
                     require: false,
                     tooLong: false,
                     tooShort: false
+                },
+                request: {
+                    reviewed_menu_id: 0,
+                    review_detail: ''
                 }
             }
         },
@@ -80,7 +89,16 @@
                 axios.get(Url)
                 .then(res => {
                     this.Reviews = res.data.reviews
-		    console.log(this.Reviews[0])
+		            console.log(this.Reviews[0])
+                })
+            },
+            PostReviewData: function(id, detail){
+                const Url = "https://172.16.16.7:8086/api/post-review"
+                this.request.reviewed_menu_id = id
+                this.request.review_detail = detail
+                axios.post(Url, this.request)
+                .then(res => {
+                    console.log(res.data)
                 })
             }
         }, 
