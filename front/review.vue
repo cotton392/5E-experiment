@@ -14,21 +14,13 @@ module.exports = {
     return {
       title: 'review.vue',
       message: 'Hello',
-        error: {
-            require: false,
-            tooLong: false,
-            tooShort: false
-        }
+        
     }
   },
   methods: {
   },
   watch :{
-    message: function(newVal, oldVal) {
-        this.error.require = (newVal.length < 1) ? true : false;
-        this.error.tooLong = (newVal.length > 255) ? true : false;
-        this.error.tooShort = (newVal.length < 4) ? true : false;
-    }
+    
   }
 }
 </script>

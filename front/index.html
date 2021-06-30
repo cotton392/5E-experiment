@@ -14,13 +14,6 @@
 
     <!-- Vue Loader -->
     <script src="https://unpkg.com/http-vue-loader"></script>
-    
-    <!-- Vuetify -->
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -42,7 +35,7 @@
 </body>
 
 <script>
-    const Top = {
+    Vue.component('top-component', {
         template: '<h1>hello 2</h1>',
         data: function(){
             return {
@@ -62,9 +55,9 @@
                 })
             }
         }
-    }
+    })
 
-    const Review = {
+    Vue.component('review-component', {
         template: '<h1>hello 1</h1>',
         data: function(){
             return {
@@ -110,14 +103,10 @@
                 this.error.tooShort = (newVal.length < 4) ? true : false;
             }
         }
-    }
+    })
 
     const app = new Vue({
         el: "#app",
-        components: {
-            'top-component': Top,
-            'review-component': Review
-        }
     })
 </script>
 
