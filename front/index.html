@@ -45,16 +45,16 @@
             }
         },
         created: function(){
-            GetMenuData()
+            this.GetMenuData()
         },
         methods: {
             GetMenuData: function(){
                 const Url = "https://172.16.16.7:8086/api/get-menu"
                 axios.get(Url)
                 .then(res => {
-                    this.Menus = res.menu_detail
+                    this.Menus = res.data.menu_detail
+		    console.log(this.Menus[0])
                 })
-                console.log(this.Menus)
             }
         }
     }
@@ -72,16 +72,16 @@
             }
         },
         created: function(){
-            GetReviewData()
+            this.GetReviewData()
         },
         methods: {
             GetReviewData: function(){
                 const Url = "https://172.16.16.7:8086/api/get-review"
                 axios.get(Url)
                 .then(res => {
-                    this.Reviews = res.reviews
+                    this.Reviews = res.data.reviews
+		    console.log(this.Reviews[0])
                 })
-                console.log(this.Reviews)
             }
         }, 
         watch: {
@@ -97,7 +97,7 @@
         el: "#app",
         components: {
             'top-component': Top,
-            'Review-component': Review
+            'review-component': Review
         }
     }).$mount('#app');
 </script>
