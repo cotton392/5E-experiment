@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<title>レビューを書く</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="panel panel-default mt-5">
+    <div class="panel-heading"><h3>レビューを書く</h3></div>
+    <div class="panel-body">
+        <div class="form" style="display: column;">
+        <form method="post" action= "">
+            <div class="select">
+                <select class="form-control form-control-lg">
+                    <option selected>メニューを選択</option>
+                    <option value="1">Aセット</option>
+                    <option value="2">Bセット</option>
+                    <option value="3">カレーライス</option>
+                    <option value="4">カツカレー</option>
+                    <option value="5">親子丼</option>
+                    <option value="6">カツ丼</option>
+                    <option value="7">カレーうどん</option>
+                    <option value="8">ラーメン</option>
+                    <option value="9">かけうどん</option>
+                    <option value="10">かけそば</option>
+                    <option value="11">チャーハン</option>
+                    <option value="12">ライス</option>
+                </select>
+            </div>
+            <div class="review">
+                <textarea class="form-control" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
+            </div>
+            <div class="submit">
+                <button type="submit" class="btn btn-primary">送信</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="panel panel-default mt-5">
+    <div class="panel-heading"><h3>他の人のレビューを見る</h3></div>
+    <div class="panel-body">ここにレビュー</div>
+    <div class="panel-body">ここにレビュー</div>
+    <div class="panel-body">ここにレビュー</div>
+
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</body>
+</html>
