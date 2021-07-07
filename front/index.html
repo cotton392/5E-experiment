@@ -86,11 +86,11 @@
             PostReviewData: function(){
                 const Url = "https://172.16.16.7:8086/api/post-review"
                 console.log(this.reviewed_menu_id)
-		console.log(this.review_detail)
+		        console.log(this.review_detail)
                 axios.post(Url, {
-		    reviewed_menu_id: this.reviewed_menu_id,
-		    review_detail: this.review_detail
-		})
+		            reviewed_menu_id: this.reviewed_menu_id,
+		            review_detail: this.review_detail
+		        })
                 .then(res => {
                     console.log(res.data)
                 })
