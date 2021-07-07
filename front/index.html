@@ -63,7 +63,7 @@
         <select class="form-control form-control-lg">
             <option disabled value=0>選択してください</option>
             <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
-                {{ menu.name }}
+                [[ menu.name ]]
             </option>
         </select>
 
@@ -83,7 +83,7 @@
     <ul>
         <li v-for="review in reviews">
             <div class="panel-body">
-                {{ review.review_detail }}
+                [[ review.review_detail ]]
             </div>
         </li>
     </ul>
@@ -142,6 +142,7 @@
 
     const app = new Vue({
         el: "#app",
+        delimiters: ['[[', ']]'],
     })
 </script>
 
