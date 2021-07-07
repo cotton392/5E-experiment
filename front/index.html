@@ -17,6 +17,8 @@
 
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </head>
 
@@ -35,7 +37,7 @@
         template: '<h1>hello 2</h1>',
         data: function(){
             return {
-                Menus: {},
+                menus: {},
             }
         },
         created: function(){
@@ -54,56 +56,89 @@
     })
 
     Vue.component('review-component', {
-        template:`<div>
-	<input v-model="reviewed_menu_id" placeholder="1" required>
-        <input v-model="review_detail" placeholder="ここにレビュー本文を入力" required>
-        <button v-on:click="PostReviewData">送信</button>
-	</div>`,
+        template: `<div>
+            <div class="panel panel-default mt-5">
+    <div class="panel-heading"><h3>レビューを書く</h3></div>
+    <div class="panel-body">
+        <select class="form-control form-control-lg">
+            <option disabled value=0>選択してください</option>
+            <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
+                {{ menu.name }}
+            </option>
+        </select>
+
+        <div class="review">
+            <textarea class="form-control" v-model="review_detail" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
+        </div>
+
+        <div class="submit">
+            <button v-on:click="PostReviewData" type="submit" class="btn btn-primary">送信</button>
+        </div>
+    </div>
+</div>
+<br>
+
+<div class="panel panel-default mt-5">
+    <div class="panel-heading"><h3>他の人のレビューを見る</h3></div>
+    <ul>
+        <li v-for="review in reviews">
+            <div class="panel-body">
+                {{ review.review_detail }}
+            </div>
+        </li>
+    </ul>
+
+</div>
+        </div>`,
         data: function(){
-            return {
-                Reviews: {},
-                error: {
-                    require: false,
-                    tooLong: false,
-                    tooShort: false
-                },
-                reviewed_menu_id: 0,
-                review_detail: ''
-            }
-        },
-        created: function(){
-            this.GetReviewData()
-        },
-        methods: {
-            GetReviewData: function(){
-                const Url = "https://172.16.16.7:8086/api/get-review"
-                axios.get(Url)
-                .then(res => {
-                    this.Reviews = res.data.reviews
-		            console.log(this.Reviews[0])
-                })
-            },
-            PostReviewData: function(){
-                const Url = "https://172.16.16.7:8086/api/post-review"
-                console.log(this.reviewed_menu_id)
-		        console.log(this.review_detail)
-                axios.post(Url, {
-		            reviewed_menu_id: this.reviewed_menu_id,
-		            review_detail: this.review_detail
-		        })
-                .then(res => {
-                    console.log(res.data)
-                })
-            }
-        }, 
-        watch: {
-            message: function(newVal, oldVal) {
-                this.error.require = (newVal.length < 1) ? true : false;
-                this.error.tooLong = (newVal.length > 255) ? true : false;
-                this.error.tooShort = (newVal.length < 4) ? true : false;
-            }
+        return {
+            reviews: {},
+            menus: [
+                {id: 1, name: "Aセット"},
+                {id: 2, name: "Bセット"},
+                {id: 3, name: "カレーライス"},
+                {id: 4, name: "カツカレー"},
+                {id: 5, name: "親子丼"},
+                {id: 6, name: "カツ丼"},
+                {id: 7, name: "カレーうどん"},
+                {id: 8, name: "ラーメン"},
+                {id: 9, name: "かけうどん"},
+                {id: 10, name: "かけそば"},
+                {id: 11, name: "チャーハン"},
+                {id: 12, name: "ライス"},
+            ],
+            reviewed_menu_id: 1,
+            review_detail: ''
         }
+    },
+    created: function(){
+        this.GetReviewData()
+    },
+    methods: {
+        GetReviewData: function(){
+            const Url = "https://172.16.16.7:8086/api/get-review"
+            axios.get(Url)
+            .then(res => {
+                this.Reviews = res.data.reviews
+                console.log(this.Reviews[0])
+            })
+        },
+        PostReviewData: function(){
+            const Url = "https://172.16.16.7:8086/api/post-review"
+            console.log(this.reviewed_menu_id)
+            console.log(this.review_detail)
+            axios.post(Url, {
+                reviewed_menu_id: this.reviewed_menu_id,
+                review_detail: this.review_detail
+            })
+            .then(res => {
+                console.log(res.data)
+            })
+        }
+    }
     })
+
+
 
     const app = new Vue({
         el: "#app",

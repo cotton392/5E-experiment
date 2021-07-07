@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <!-- Vue Router -->
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+    <!-- Vue Loader -->
+    <script src="https://unpkg.com/http-vue-loader"></script>
+
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <title>レビューを書く</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
 </head>
 
 <body>
+<div id="app">
 <div class="panel panel-default mt-5">
     <div class="panel-heading"><h3>レビューを書く</h3></div>
     <div class="panel-body">
-        <div class="form" style="display: column;">
-        <form method="post" action= "">
-            <div class="select">
-                <select class="form-control form-control-lg">
-                    <option selected>メニューを選択</option>
-                    <option value="1">Aセット</option>
-                    <option value="2">Bセット</option>
-                    <option value="3">カレーライス</option>
-                    <option value="4">カツカレー</option>
-                    <option value="5">親子丼</option>
-                    <option value="6">カツ丼</option>
-                    <option value="7">カレーうどん</option>
-                    <option value="8">ラーメン</option>
-                    <option value="9">かけうどん</option>
-                    <option value="10">かけそば</option>
-                    <option value="11">チャーハン</option>
-                    <option value="12">ライス</option>
-                </select>
-            </div>
-            <div class="review">
-                <textarea class="form-control" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
-            </div>
-            <div class="submit">
-                <button type="submit" class="btn btn-primary">送信</button>
-            </div>
-        </form>
+        <select class="form-control form-control-lg">
+            <option disabled value=0>選択してください</option>
+            <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
+                {{ menu.name }}
+            </option>
+        </select>
+
+        <div class="review">
+            <textarea class="form-control" v-model="review_detail" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
+        </div>
+
+        <div class="submit">
+            <button v-on:click="PostReviewData" type="submit" class="btn btn-primary">送信</button>
         </div>
     </div>
 </div>
@@ -43,13 +42,75 @@
 
 <div class="panel panel-default mt-5">
     <div class="panel-heading"><h3>他の人のレビューを見る</h3></div>
-    <div class="panel-body">ここにレビュー</div>
-    <div class="panel-body">ここにレビュー</div>
-    <div class="panel-body">ここにレビュー</div>
+    <ul>
+        <li v-for="review in reviews">
+            <div class="panel-body">
+                {{ review.review_detail }}
+            </div>
+        </li>
+    </ul>
 
 </div>
-
+</div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+    const review = new Vue({
+        el: '#app',
+        data: function(){
+        return {
+            reviews: {},
+            menus: [
+                {id: 1, name: "Aセット"},
+                {id: 2, name: "Bセット"},
+                {id: 3, name: "カレーライス"},
+                {id: 4, name: "カツカレー"},
+                {id: 5, name: "親子丼"},
+                {id: 6, name: "カツ丼"},
+                {id: 7, name: "カレーうどん"},
+                {id: 8, name: "ラーメン"},
+                {id: 9, name: "かけうどん"},
+                {id: 10, name: "かけそば"},
+                {id: 11, name: "チャーハン"},
+                {id: 12, name: "ライス"},
+            ],
+            reviewed_menu_id: 1,
+            review_detail: ''
+        }
+    },
+    created: function(){
+        this.GetReviewData()
+    },
+    methods: {
+        GetReviewData: function(){
+            const Url = "https://172.16.16.7:8086/api/get-review"
+            axios.get(Url)
+            .then(res => {
+                this.Reviews = res.data.reviews
+                console.log(this.Reviews[0])
+            })
+        },
+        PostReviewData: function(){
+            const Url = "https://172.16.16.7:8086/api/post-review"
+            console.log(this.reviewed_menu_id)
+            console.log(this.review_detail)
+            axios.post(Url, {
+                reviewed_menu_id: this.reviewed_menu_id,
+                review_detail: this.review_detail
+            })
+            .then(res => {
+                console.log(res.data)
+            })
+        }
+    }, 
+    watch: {
+        message: function(newVal, oldVal) {
+            this.error.require = (newVal.length < 1) ? true : false;
+            this.error.tooLong = (newVal.length > 255) ? true : false;
+            this.error.tooShort = (newVal.length < 4) ? true : false;
+        }
+    }
+    })
+</script>
 </body>
 </html>

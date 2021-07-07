@@ -5,16 +5,16 @@
         <div class="error" v-if="error.require">必須項目です。</div>
         <div class="error" v-if="error.tooLong">長すぎます。</div>
         <div class="error" v-if="error.tooShort">短すぎます。</div>
- <!--        
-<select v-model="selectedMenues">
-  <option disabled value="">メニュー一覧</option>
-  <option v-for="menu in optionMenues" 
-    v-bind:value="menu.name" 
-    v-bind:key="menu.id">
-  {{ Menu.name }}
-  </option>
-</select>
--->
+        
+    <select v-model="selectedMenues">
+      <option disabled value="">メニュー一覧</option>
+      <option v-for="menu in optionMenues" 
+        v-bind:value="menu.name" 
+        v-bind:key="menu.id">
+      {{ Menu.name }}
+      </option>
+    </select>
+
   </div>
   
 </template>
