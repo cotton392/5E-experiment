@@ -1,6 +1,7 @@
 from flask.app import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
+from sqlalchemy import desc
 from flask import Blueprint, request, abort, jsonify, render_template
 from datetime import datetime
 from os.path import join, dirname
@@ -79,15 +80,14 @@ db.create_all()
 @app.route('/api/get-menu', methods=['GET'])
 def get_menu_detail():
     menus_detail = Menu.query.all()
-    return jsonify({'menu_detail': [Menu.to_dict() for detail in menus_detail]})
+    return jsonify({'menu_detail': [detail.to_dict() for detail in menus_detail]})
 
 @app.route('/api/post-sell-condition', methods=['POST'])
 def post_sell_condition():
     payload = request.json
-    modified_menu_id = payload.get('modified_menu_id')
-    sell_condition = payload.get('sell_condition')
+    modified_menu_id = int(payload.get('modified_menu_id'))
     modified_menu = db.session.query(Menu).filter(Menu.id==modified_menu_id).first()
-    modified_menu.is_sold_out = sell_condition
+    modified_menu.is_sold_out = True
 
     db.session.add(modified_menu)
     db.session.commit()
@@ -96,20 +96,20 @@ def post_sell_condition():
 
 @app.route('/api/get-review', methods=['GET'])
 def get_review_detail():
-    t = text("SELECT * FROM cafeteria_review_table ORDER BY updated_at OFFSET 0 LIMIT 3")
-    db_res = db.session.execute(t)
+    db_res = db.session.query(Review).order_by(desc(Review.id)).limit(3)
 
-    return jsonify({'reviews': [Menu.to_dict() for review in db_res]})
+    return jsonify({'reviews': [review.to_dict() for review in db_res]})
 
 
 @app.route('/api/post-review', methods=['POST'])
 def post_review_detail():
     payload = request.json
-    reviewed_nemu_id = payload.get('reviewed_nemu_id')
+    reviewed_menu_id = payload.get('reviewed_menu_id')
+    print(reviewed_menu_id)
     review_detail = payload.get('review_detail')
     updated_at = int(datetime.now().timestamp())
 
-    review = Review(reviewed_nemu_id, review_detail, updated_at)
+    review = Review(reviewed_menu_id, review_detail, updated_at)
     db.session.add(review)
     db.session.commit()
 
@@ -125,3 +125,4 @@ def index():
 # ***************** run app *****************
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(sys.argv[1]), ssl_context=context, debug=True)
+

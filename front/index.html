@@ -14,36 +14,100 @@
 
     <!-- Vue Loader -->
     <script src="https://unpkg.com/http-vue-loader"></script>
-    
-    <!-- Vuetify -->
-    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
-    
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
 </head>
 
 <body>
 
     <div id="app">
-        <!-- <v-app>
-            <v-content>
-                <v-container>hello, vuetify</v-container>
-            </v-content>
-        </v-app> -->
+        <top-component></top-component>
+        <review-component></review-component>
         
-        <ul>
-            <router-link tag="li" to="/">top</router-link>
-            <router-link tag="li" to="/review">review</router-link>
-        </ul>
-        <router-view>hoge</router-view>
     </div>
 
-    <script src="./main.js"></script>
-
 </body>
+
+<script>
+    Vue.component('top-component', {
+        template: '<h1>hello 2</h1>',
+        data: function(){
+            return {
+                Menus: {},
+            }
+        },
+        created: function(){
+            this.GetMenuData()
+        },
+        methods: {
+            GetMenuData: function(){
+                const Url = "https://172.16.16.7:8086/api/get-menu"
+                axios.get(Url)
+                .then(res => {
+                    this.Menus = res.data.menu_detail
+		            console.log(this.Menus[0])
+                })
+            }
+        }
+    })
+
+    Vue.component('review-component', {
+        template:`<div>
+	<input v-model="reviewed_menu_id" placeholder="1" required>
+        <input v-model="review_detail" placeholder="ここにレビュー本文を入力" required>
+        <button v-on:click="PostReviewData">送信</button>
+	</div>`,
+        data: function(){
+            return {
+                Reviews: {},
+                error: {
+                    require: false,
+                    tooLong: false,
+                    tooShort: false
+                },
+                reviewed_menu_id: 0,
+                review_detail: ''
+            }
+        },
+        created: function(){
+            this.GetReviewData()
+        },
+        methods: {
+            GetReviewData: function(){
+                const Url = "https://172.16.16.7:8086/api/get-review"
+                axios.get(Url)
+                .then(res => {
+                    this.Reviews = res.data.reviews
+		            console.log(this.Reviews[0])
+                })
+            },
+            PostReviewData: function(){
+                const Url = "https://172.16.16.7:8086/api/post-review"
+                console.log(this.reviewed_menu_id)
+		        console.log(this.review_detail)
+                axios.post(Url, {
+		            reviewed_menu_id: this.reviewed_menu_id,
+		            review_detail: this.review_detail
+		        })
+                .then(res => {
+                    console.log(res.data)
+                })
+            }
+        }, 
+        watch: {
+            message: function(newVal, oldVal) {
+                this.error.require = (newVal.length < 1) ? true : false;
+                this.error.tooLong = (newVal.length > 255) ? true : false;
+                this.error.tooShort = (newVal.length < 4) ? true : false;
+            }
+        }
+    })
+
+    const app = new Vue({
+        el: "#app",
+    })
+</script>
 
 </html>

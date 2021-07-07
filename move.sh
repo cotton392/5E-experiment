@@ -1,2 +1,2 @@
-cp /front/* ../public_html
-cp /server/* ../public_html
+cp front/* ../public_html/templates
+cp server/* ../public_html
