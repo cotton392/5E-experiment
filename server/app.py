@@ -73,6 +73,7 @@ class Review(db.Model):
             'updated_at': self.updated_at
         }
 
+
 db.create_all()
 
 
@@ -82,17 +83,19 @@ def get_menu_detail():
     menus_detail = Menu.query.all()
     return jsonify({'menu_detail': [detail.to_dict() for detail in menus_detail]})
 
+
 @app.route('/api/post-sell-condition', methods=['POST'])
 def post_sell_condition():
     payload = request.json
     modified_menu_id = int(payload.get('modified_menu_id'))
-    modified_menu = db.session.query(Menu).filter(Menu.id==modified_menu_id).first()
+    modified_menu = db.session.query(Menu).filter(Menu.id == modified_menu_id).first()
     modified_menu.is_sold_out = True
 
     db.session.add(modified_menu)
     db.session.commit()
 
     return jsonify(modified_menu.to_dict())
+
 
 @app.route('/api/get-review', methods=['GET'])
 def get_review_detail():
@@ -125,4 +128,3 @@ def index():
 # ***************** run app *****************
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=int(sys.argv[1]), ssl_context=context, debug=True)
-

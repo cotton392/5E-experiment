@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>明石高専食堂システム</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- bootstrap and awesome-icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+    integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+    integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+</head>
+
+<style>
+  .success{
+    color: #4db56a;
+  }
+  .error{
+    color: #EF4123;
+  }
+  .img-trim{
+    height: 100px;
+    width: 100%;
+    object-fit: cover;
+  }
+  .filter {
+  background: #000;
+  }
+  .filter-img {
+  display: block;
+  opacity: .9;
+  }
+  .card-margin{
+    padding-top: 3px;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#menu">明石高専食堂システム</a>
+      </div>
+    </nav>
+
+    <br id="menu">
+    <br>
+    <br>
+
+    <div class="card">
+      <div class="card-header">メニュー一覧</div>
+      <div class="container">
+        <div class="card card-margin" v-for="menu in menus">
+          <div class="filter">
+            <img class="bd-placeholder-img card-img-top img-trim filter-img" v-bind:src="'image/' + [[menu.name]] + '.jpg'">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title">[[menu.name]]</h5>
+            <p class="card-text">値段: [[menu.price]]円</p>
+            <p class="card-text" v-if="menu.is_sold_out">販売状況: <i class="fas fa-check success">販売中</i></p>
+            <p class="card-text" v-else>販売状況: <i class="fas fa-times error">売り切れ</i></p>
+            <button v-on:click="ConfirmSellData(menu.id)" v-if="menu.is_sold_out" class="btn btn-primary">販売情報を変更する</button>
+            <a class="btn btn-success" href="#review">レビューを書く</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+      <br id="review">
+      <div class="card">
+        <div class="card-header">レビューを書く</div>
+        <div class="card-body">
+          <select class="form-select" v-model="reviewed_menu_id">
+            <option disabled value=0>選択してください</option>
+            <option v-for="menu in menus" v-bind:value="menu.id" v-bind:key="menu.id">
+              [[ menu.name ]]
+            </option>
+          </select>
+          <br>
+          <div>
+            <textarea class="form-control" v-model="review_detail" rows="10" required placeholder="ここにレビューを入力"></textarea>
+          </div>
+          <br>
+          <div class="submit">
+            <button v-on:click="PostReviewData" type="submit" v-bind:disabled="!is_filled_review" class="btn btn-success">送信</button>
+          </div>
+        </div>
+      </div>
+
+      <br>
+
+      <div class="card">
+        <div class=card-header>最新レビューを見る</div>
+        <div class="card col" v-for="(review, index) in reviews">
+          <div class="card-header">
+            [[index+1]]件目のレビュー
+          </div>
+          <div class=card-body>
+            [[review]]
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script>
+  const app = new Vue({
+      el: "#app",
+      delimiters: ['[[', ']]'],
+      data: {
+        Menus: {},
+        Reviews: {},
+        reviewed_menu_id: 1,
+        review_detail: '',
+        review_min: 4,
+        review_limit: 250,
+        // ここから下はテスト用データ
+        // 実際の環境で動かすときはHTML内のreviewsとmenusの頭文字を全部大文字にすること
+        reviews: [
+          "これはテストだああああああああああああああああああああああ",
+          "これはテストですわあああああああああああああああああああああああ",
+          "これがテストじゃない訳ないんだああああああああああああああああああああああ"
+        ],
+        menus: [
+          {
+            id: 1,
+            name: "test1",
+            price: 100000,
+            is_sold_out: true
+          },
+          {
+            id: 2,
+            name: "test2",
+            price: 130000,
+            is_sold_out: false
+          },
+          {
+            id: 3,
+            name: "test3",
+            price: 130000,
+            is_sold_out: false
+          },
+          {
+            id: 4,
+            name: "test4",
+            price: 130000,
+            is_sold_out: true
+          },
+          {
+            id: 5,
+            name: "test5",
+            price: 130000,
+            is_sold_out: false
+          },
+          {
+            id: 6,
+            name: "test6",
+            price: 130000,
+            is_sold_out: true
+          },
+        ],
+      },
+      created: function () {
+        this.GetMenuData()
+        this.GetReviewData()
+      },
+      computed: {
+        is_filled_review: function () {
+          return (this.review_detail.length > this.review_min && this.review_detail.length < this.review_limit)
+        }
+      },
+      methods: {
+        GetReviewData: function () {
+          const Url = "https://172.16.16.7:8086/api/get-review"
+          axios.get(Url)
+            .then(res => {
+              this.Reviews = res.data.reviews
+              console.log(this.Reviews[0])
+            })
+        },
+        PostReviewData: function () {
+          const Url = "https://172.16.16.7:8086/api/post-review"
+          console.log(this.reviewed_menu_id)
+          console.log(this.review_detail)
+          axios.post(Url, {
+            reviewed_menu_id: this.reviewed_menu_id,
+            review_detail: this.review_detail
+          }).then(res => {
+            console.log(res.data)
+          })
+          window.alert("レビューを送信しました。")
+        },
+        GetMenuData: function () {
+          const Url = "https://172.16.16.7:8086/api/get-menu"
+          axios.get(Url)
+            .then(res => {
+              this.Menus = res.data.menu_detail
+              console.log(this.Menus)
+            })
+        },
+        PostSellData: function (modified_menu_id) {
+          const Url = "https://172.16.16.7:8086/api/post-sell-condition"
+          axios.post(Url, {
+            modified_menu_id: modified_menu_id
+          }).then(res => {
+            console.log(res.data)
+          })
+        },
+        ConfirmSellData: function (modified_menu_id) {
+          var res = confirm("販売情報を売り切れに変更しますか？")
+          if(res){
+            this.PostSellData(modified_menu_id)
+            window.alert("売り切れ情報変更リクエストを送信しました。")
+          }
+        }
+      }
+  })
+</script>

@@ -2,32 +2,33 @@
 <html lang="ja">
 
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>明石高専食堂システム</title>
+  <title>明石高専食堂システム</title>
 
-    <!-- Vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <!-- Vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 
-    <!-- Vue Router -->
-    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+  <!-- Vue Router -->
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
 
-    <!-- Vue Loader -->
-    <script src="https://unpkg.com/http-vue-loader"></script>
+  <!-- Vue Loader -->
+  <script src="https://unpkg.com/http-vue-loader"></script>
 
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </head>
 
 <body>
 
     <div id="app">
-        <top-component></top-component>
-        <review-component></review-component>
-        
+
+      <top-component></top-component>
+      <review-component></review-component>
+
     </div>
 
 </body>
@@ -57,39 +58,39 @@
 
     Vue.component('review-component', {
         delimiters: ['[[', ']]'],
-        template: `<div>
-            <div class="panel panel-default mt-5">
-    <div class="panel-heading"><h3>レビューを書く</h3></div>
-    <div class="panel-body">
-        <select class="form-control form-control-lg">
-            <option disabled value=0>選択してください</option>
-            <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
-                [[ menu.name ]]
-            </option>
-        </select>
-
-        <div class="review">
-            <textarea class="form-control" v-model="review_detail" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
-        </div>
-
-        <div class="submit">
-            <button v-on:click="PostReviewData" type="submit" class="btn btn-primary">送信</button>
-        </div>
-    </div>
-</div>
-<br>
-
-<div class="panel panel-default mt-5">
-    <div class="panel-heading"><h3>他の人のレビューを見る</h3></div>
-    <ul>
-        <li v-for="review in reviews">
+        template: `
+        <div>
+          <div class="panel panel-default mt-5">
+            <div class="panel-heading"><h3>レビューを書く</h3></div>
             <div class="panel-body">
-                [[ review.review_detail ]]
-            </div>
-        </li>
-    </ul>
+              <select class="form-control form-control-lg">
+                <option disabled value=0>選択してください</option>
+                <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
+                  [[ menu.name ]]
+                </option>
+              </select>
 
-</div>
+              <div class="review">
+                <textarea class="form-control" v-model="review_detail" id="review" rows="10"minlength="4" maxlength="250" required placeholder="ここにレビューを入力"></textarea>
+              </div>
+
+              <div class="submit">
+                <button v-on:click="PostReviewData" type="submit" class="btn btn-primary">送信</button>
+              </div>
+            </div>
+          </div>
+          <br>
+
+          <div class="panel panel-default mt-5">
+          <div class="panel-heading"><h3>他の人のレビューを見る</h3></div>
+            <ul>
+              <li v-for="review in reviews">
+                <div class="panel-body">
+                  [[ review.review_detail ]]
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>`,
         data: function(){
         return {
@@ -138,7 +139,6 @@
         }
     }
     })
-
 
 
     const app = new Vue({
