@@ -192,6 +192,9 @@
             .then(res => {
               this.Reviews = res.data.reviews
               console.log(this.Reviews[0])
+            }).catch(err => {
+              window.alert("最新レビュー取得中に問題が発生しました。")
+              console.log('err:', err);
             })
         },
         PostReviewData: function () {
@@ -203,8 +206,11 @@
             review_detail: this.review_detail
           }).then(res => {
             console.log(res.data)
+            window.alert("レビューを送信しました。")
+          }).catch(err => {
+            window.alert("レビュー送信中に問題が発生しました。")
+            console.log('err:', err);
           })
-          window.alert("レビューを送信しました。")
         },
         GetMenuData: function () {
           const Url = "https://172.16.16.7:8086/api/get-menu"
@@ -212,6 +218,9 @@
             .then(res => {
               this.Menus = res.data.menu_detail
               console.log(this.Menus)
+            }).catch(err => {
+              window.alert("メニューデータ取得中に問題が発生しました。")
+              console.log('err:', err);
             })
         },
         PostSellData: function (modified_menu_id) {
@@ -220,13 +229,16 @@
             modified_menu_id: modified_menu_id
           }).then(res => {
             console.log(res.data)
+          }).catch(err => {
+            window.alert("販売状況の変更リクエスト中に問題が発生しました。")
+            console.log('err:', err);
           })
         },
         ConfirmSellData: function (modified_menu_id) {
           var res = confirm("販売情報を売り切れに変更しますか？")
           if(res){
             this.PostSellData(modified_menu_id)
-            window.alert("売り切れ情報変更リクエストを送信しました。")
+            window.alert("販売情報変更リクエストを送信しました。")
           }
         }
       }
