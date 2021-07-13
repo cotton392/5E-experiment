@@ -58,19 +58,19 @@ class Review(db.Model):
     __tablename__ = "cafeteria_review_table"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    reviewed_menu_id = db.Column(db.Integer, nullable=False)
+    reviewed_menu = db.Column(db.String(255), nullable=False)
     review_detail = db.Column(db.String(255), nullable=False)
     updated_at = db.Column(db.Integer, nullable=False)
 
-    def __init__(self, reviewed_menu_id, review_detail, updated_at):
-        self.reviewed_menu_id = reviewed_menu_id
+    def __init__(self, reviewed_menu, review_detail, updated_at):
+        self.reviewed_menu = reviewed_menu
         self.review_detail = review_detail
         self.updated_at = updated_at
 
     def to_dict(self):
         return {
             'id': self.id,
-            'reviewed_menu_id': self.reviewed_menu_id,
+            'reviewed_menu': self.reviewed_menu,
             'review_detail': self.review_detail,
             'updated_at': self.updated_at
         }
