@@ -86,9 +86,9 @@
       <div class="card">
         <div class="card-header">レビューを書く</div>
         <div class="card-body">
-          <select class="form-select" v-model="reviewed_menu_id">
+          <select class="form-select" v-model="reviewed_menu">
             <option disabled value=0>選択してください</option>
-            <option v-for="menu in menus" v-bind:value="menu.id" v-bind:key="menu.id">
+            <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
               [[ menu.name ]]
             </option>
           </select>
@@ -127,7 +127,7 @@
       data: {
         Menus: {},
         Reviews: {},
-        reviewed_menu_id: 1,
+        reviewed_menu: '',
         review_detail: '',
         review_min: 4,
         review_limit: 250,
@@ -206,10 +206,10 @@
         },
         PostReviewData: function () {
           const Url = "https://172.16.16.7:8086/api/post-review"
-          console.log(this.reviewed_menu_id)
+          console.log(this.reviewed_menu)
           console.log(this.review_detail)
           axios.post(Url, {
-            reviewed_menu_id: this.reviewed_menu_id,
+            reviewed_menu: this.reviewed_menu,
             review_detail: this.review_detail
           }).then(res => {
             console.log(res.data)
