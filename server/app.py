@@ -37,6 +37,7 @@ class Menu(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     menu_name = db.Column(db.String(255), nullable=False)
+    description = db.Column(db.String(255), nullable=True)  # Aセット・Bセット用
     menu_price = db.Column(db.Integer, nullable=False)
     is_sold_out = db.Column(db.Boolean, nullable=False, default=True)
     updated_at = db.Column(db.Integer, nullable=False)
@@ -45,6 +46,7 @@ class Menu(db.Model):
         return {
             'id': self.id,
             'menu_name': self.menu_name,
+            'description': self.description,
             'menu_price': self.menu_price,
             'is_sold_out': self.is_sold_out,
             'updated_at': self.updated_at

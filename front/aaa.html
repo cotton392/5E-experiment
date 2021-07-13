@@ -63,7 +63,7 @@
     <br>
 
     <div class="card">
-      <div class="card-header">メニュー一覧</div>
+      <div class="card-header">[[today_date_string]]のメニュー一覧</div>
       <div class="container">
         <div class="card card-margin" v-for="menu in menus">
           <div class="filter">
@@ -72,6 +72,7 @@
           <div class="card-body">
             <h5 class="card-title">[[menu.name]]</h5>
             <p class="card-text">値段: [[menu.price]]円</p>
+            <p class="card-text" v-if="menu.description !== null">メニュー詳細: [[menu.description]]</p>
             <p class="card-text" v-if="menu.is_sold_out">販売状況: <i class="fas fa-check success">販売中</i></p>
             <p class="card-text" v-else>販売状況: <i class="fas fa-times error">売り切れ</i></p>
             <button v-on:click="ConfirmSellData(menu.id)" v-if="menu.is_sold_out" class="btn btn-primary">販売情報を変更する</button>
@@ -130,6 +131,7 @@
         review_detail: '',
         review_min: 4,
         review_limit: 250,
+        today_date_string: '',
         // ここから下はテスト用データ
         // 実際の環境で動かすときはHTML内のreviewsとmenusの頭文字を全部大文字にすること
         reviews: [
@@ -179,6 +181,7 @@
       created: function () {
         this.GetMenuData()
         this.GetReviewData()
+        this.FormatDate()
       },
       computed: {
         is_filled_review: function () {
@@ -186,6 +189,10 @@
         }
       },
       methods: {
+        FormatDate: function () {
+          const dt = new Date()
+          return (dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日')
+        },
         GetReviewData: function () {
           const Url = "https://172.16.16.7:8086/api/get-review"
           axios.get(Url)
