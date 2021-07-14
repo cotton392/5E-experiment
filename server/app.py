@@ -82,7 +82,7 @@ db.create_all()
 # ***************** api route *****************
 @app.route('/api/get-menu', methods=['GET'])
 def get_menu_detail():
-    menus_detail = Menu.query.all()
+    menus_detail = db.session.query(Menu).order_by(Menu.id).all()
     return jsonify({'menu_detail': [detail.to_dict() for detail in menus_detail]})
 
 
@@ -91,7 +91,8 @@ def post_sell_condition():
     payload = request.json
     modified_menu_id = int(payload.get('modified_menu_id'))
     modified_menu = db.session.query(Menu).filter(Menu.id == modified_menu_id).first()
-    modified_menu.is_sold_out = True
+    print(modified_menu)
+    modified_menu.is_sold_out = False
 
     db.session.add(modified_menu)
     db.session.commit()
@@ -109,12 +110,12 @@ def get_review_detail():
 @app.route('/api/post-review', methods=['POST'])
 def post_review_detail():
     payload = request.json
-    reviewed_menu_id = payload.get('reviewed_menu_id')
-    print(reviewed_menu_id)
+    reviewed_menu = payload.get('reviewed_menu')
+    print(reviewed_menu)
     review_detail = payload.get('review_detail')
     updated_at = int(datetime.now().timestamp())
 
-    review = Review(reviewed_menu_id, review_detail, updated_at)
+    review = Review(reviewed_menu, review_detail, updated_at)
     db.session.add(review)
     db.session.commit()
 
@@ -124,7 +125,7 @@ def post_review_detail():
 # ***************** view route *****************
 @app.route('/', methods=['GET'])
 def index():
-    return render_template("index.html")
+    return render_template("aaa.html")
 
 
 # ***************** run app *****************
