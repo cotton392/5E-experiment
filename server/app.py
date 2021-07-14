@@ -123,9 +123,9 @@ def post_review_detail():
 
 
 # ***************** view route *****************
-@app.route('/', methods=['GET'])
+@app.route('/team6', methods=['GET'])
 def index():
-    return render_template("aaa.html")
+    return render_template("index.html")
 
 
 # ***************** run app *****************
