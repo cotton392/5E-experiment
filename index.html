@@ -132,51 +132,6 @@
         review_min: 4,
         review_limit: 250,
         today_date_string: '',
-        // ここから下はテスト用データ
-        // 実際の環境で動かすときはHTML内のreviewsとmenusの頭文字を全部大文字にすること
-        reviews: [
-          "これはテストだああああああああああああああああああああああ",
-          "これはテストですわあああああああああああああああああああああああ",
-          "これがテストじゃない訳ないんだああああああああああああああああああああああ"
-        ],
-        menus: [
-          {
-            id: 1,
-            name: "test1",
-            price: 100000,
-            is_sold_out: true
-          },
-          {
-            id: 2,
-            name: "test2",
-            price: 130000,
-            is_sold_out: false
-          },
-          {
-            id: 3,
-            name: "test3",
-            price: 130000,
-            is_sold_out: false
-          },
-          {
-            id: 4,
-            name: "test4",
-            price: 130000,
-            is_sold_out: true
-          },
-          {
-            id: 5,
-            name: "test5",
-            price: 130000,
-            is_sold_out: false
-          },
-          {
-            id: 6,
-            name: "test6",
-            price: 130000,
-            is_sold_out: true
-          },
-        ],
       },
       created: function () {
         this.GetMenuData()
