@@ -65,13 +65,13 @@
     <div class="card">
       <div class="card-header">[[today_date_string]]のメニュー一覧</div>
       <div class="container">
-        <div class="card card-margin" v-for="menu in menus">
+        <div class="card card-margin" v-for="menu in Menus">
           <div class="filter">
-            <img class="bd-placeholder-img card-img-top img-trim filter-img" v-bind:src="'image/' + [[menu.name]] + '.jpg'">
+            <img class="bd-placeholder-img card-img-top img-trim filter-img" v-bind:src="'image/' + [[menu.menu_name]] + '.jpg'">
           </div>
           <div class="card-body">
-            <h5 class="card-title">[[menu.name]]</h5>
-            <p class="card-text">値段: [[menu.price]]円</p>
+            <h5 class="card-title">[[menu.menu_name]]</h5>
+            <p class="card-text">値段: [[menu.menu_price]]円</p>
             <p class="card-text" v-if="menu.description !== null">メニュー詳細: [[menu.description]]</p>
             <p class="card-text" v-if="menu.is_sold_out">販売状況: <i class="fas fa-check success">販売中</i></p>
             <p class="card-text" v-else>販売状況: <i class="fas fa-times error">売り切れ</i></p>
@@ -88,12 +88,13 @@
         <div class="card-body">
           <select class="form-select" v-model="reviewed_menu">
             <option disabled value=0>選択してください</option>
-            <option v-for="menu in menus" v-bind:value="menu.name" v-bind:key="menu.id">
-              [[ menu.name ]]
+            <option v-for="menu in Menus" v-bind:value="menu.menu_name" v-bind:key="menu.id">
+              [[ menu.menu_name ]]
             </option>
           </select>
           <br>
           <div>
+            <p> [[reviewed_menu]] </p>
             <textarea class="form-control" v-model="review_detail" rows="10" required placeholder="ここにレビューを入力"></textarea>
           </div>
           <br>
@@ -107,12 +108,12 @@
 
       <div class="card">
         <div class=card-header>最新レビューを見る</div>
-        <div class="card col" v-for="(review, index) in reviews">
+        <div class="card col" v-for="(review, index) in Reviews">
           <div class="card-header">
-            [[index+1]]件目のレビュー
+            [[index+1]]件目のレビュー メニュー: [[review.reviewed_menu]]
           </div>
           <div class=card-body>
-            [[review]]
+            [[review.review_detail]]
           </div>
         </div>
       </div>
@@ -191,7 +192,7 @@
       methods: {
         FormatDate: function () {
           const dt = new Date()
-          return (dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日')
+          this.today_date_string = (dt.getFullYear() + '年' + (dt.getMonth()+1) + '月' + dt.getDate() + '日')
         },
         GetReviewData: function () {
           const Url = "https://172.16.16.7:8086/api/get-review"
